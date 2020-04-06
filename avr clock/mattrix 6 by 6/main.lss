@@ -1,0 +1,350 @@
+
+main.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000001ca  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .debug_aranges 00000020  00000000  00000000  0000021e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  2 .debug_pubnames 00000042  00000000  00000000  0000023e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_info   00000287  00000000  00000000  00000280  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_abbrev 00000166  00000000  00000000  00000507  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_line   00000209  00000000  00000000  0000066d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_frame  00000060  00000000  00000000  00000878  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    000000bd  00000000  00000000  000008d8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_loc    00000080  00000000  00000000  00000995  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 36 00 	call	0x6c	; 0x6c <main>
+  64:	0c 94 e3 00 	jmp	0x1c6	; 0x1c6 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <main>:
+
+
+int main(void)
+{
+
+	DDRB=0xFF;
+  6c:	8f ef       	ldi	r24, 0xFF	; 255
+  6e:	87 bb       	out	0x17, r24	; 23
+	DDRC=0xFF;
+  70:	84 bb       	out	0x14, r24	; 20
+	DDRD=0x00; //0-right 1-left 2-up 3-down	
+  72:	11 ba       	out	0x11, r1	; 17
+
+
+void fade(void)
+{
+	
+	PORTB=0x00;
+  74:	18 ba       	out	0x18, r1	; 24
+	PORTC=0xff;
+  76:	85 bb       	out	0x15, r24	; 21
+
+}
+
+void glow(int a,int b)
+{
+	PORTB=(1<<(a-1));
+  78:	81 e0       	ldi	r24, 0x01	; 1
+  7a:	88 bb       	out	0x18, r24	; 24
+	
+	PORTC=(0xff) ^ (1<<(b-1));	
+  7c:	8e ef       	ldi	r24, 0xFE	; 254
+  7e:	85 bb       	out	0x15, r24	; 21
+  80:	ff cf       	rjmp	.-2      	; 0x80 <main+0x14>
+
+00000082 <serialglow>:
+}
+
+
+
+void serialglow(int a,int b)
+{
+  82:	0f 93       	push	r16
+  84:	1f 93       	push	r17
+  86:	fc 01       	movw	r30, r24
+  88:	8b 01       	movw	r16, r22
+
+}
+
+void glow(int a,int b)
+{
+	PORTB=(1<<(a-1));
+  8a:	6a e0       	ldi	r22, 0x0A	; 10
+  8c:	70 e0       	ldi	r23, 0x00	; 0
+  8e:	0e 94 bc 00 	call	0x178	; 0x178 <__divmodhi4>
+  92:	61 50       	subi	r22, 0x01	; 1
+  94:	70 40       	sbci	r23, 0x00	; 0
+  96:	21 e0       	ldi	r18, 0x01	; 1
+  98:	30 e0       	ldi	r19, 0x00	; 0
+  9a:	a9 01       	movw	r20, r18
+  9c:	02 c0       	rjmp	.+4      	; 0xa2 <serialglow+0x20>
+  9e:	44 0f       	add	r20, r20
+  a0:	55 1f       	adc	r21, r21
+  a2:	6a 95       	dec	r22
+  a4:	e2 f7       	brpl	.-8      	; 0x9e <serialglow+0x1c>
+  a6:	48 bb       	out	0x18, r20	; 24
+	
+	PORTC=(0xff) ^ (1<<(b-1));	
+  a8:	cf 01       	movw	r24, r30
+  aa:	6a e0       	ldi	r22, 0x0A	; 10
+  ac:	70 e0       	ldi	r23, 0x00	; 0
+  ae:	0e 94 bc 00 	call	0x178	; 0x178 <__divmodhi4>
+  b2:	01 97       	sbiw	r24, 0x01	; 1
+  b4:	a9 01       	movw	r20, r18
+  b6:	02 c0       	rjmp	.+4      	; 0xbc <serialglow+0x3a>
+  b8:	44 0f       	add	r20, r20
+  ba:	55 1f       	adc	r21, r21
+  bc:	8a 95       	dec	r24
+  be:	e2 f7       	brpl	.-8      	; 0xb8 <serialglow+0x36>
+  c0:	ca 01       	movw	r24, r20
+  c2:	80 95       	com	r24
+  c4:	85 bb       	out	0x15, r24	; 21
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+  c6:	e0 ea       	ldi	r30, 0xA0	; 160
+  c8:	ff e0       	ldi	r31, 0x0F	; 15
+  ca:	cf 01       	movw	r24, r30
+  cc:	01 97       	sbiw	r24, 0x01	; 1
+  ce:	f1 f7       	brne	.-4      	; 0xcc <serialglow+0x4a>
+
+}
+
+void glow(int a,int b)
+{
+	PORTB=(1<<(a-1));
+  d0:	c8 01       	movw	r24, r16
+  d2:	6a e0       	ldi	r22, 0x0A	; 10
+  d4:	70 e0       	ldi	r23, 0x00	; 0
+  d6:	0e 94 bc 00 	call	0x178	; 0x178 <__divmodhi4>
+  da:	61 50       	subi	r22, 0x01	; 1
+  dc:	70 40       	sbci	r23, 0x00	; 0
+  de:	c9 01       	movw	r24, r18
+  e0:	02 c0       	rjmp	.+4      	; 0xe6 <serialglow+0x64>
+  e2:	88 0f       	add	r24, r24
+  e4:	99 1f       	adc	r25, r25
+  e6:	6a 95       	dec	r22
+  e8:	e2 f7       	brpl	.-8      	; 0xe2 <serialglow+0x60>
+  ea:	88 bb       	out	0x18, r24	; 24
+	
+	PORTC=(0xff) ^ (1<<(b-1));	
+  ec:	c8 01       	movw	r24, r16
+  ee:	6a e0       	ldi	r22, 0x0A	; 10
+  f0:	70 e0       	ldi	r23, 0x00	; 0
+  f2:	0e 94 bc 00 	call	0x178	; 0x178 <__divmodhi4>
+  f6:	01 97       	sbiw	r24, 0x01	; 1
+  f8:	02 c0       	rjmp	.+4      	; 0xfe <serialglow+0x7c>
+  fa:	22 0f       	add	r18, r18
+  fc:	33 1f       	adc	r19, r19
+  fe:	8a 95       	dec	r24
+ 100:	e2 f7       	brpl	.-8      	; 0xfa <serialglow+0x78>
+ 102:	20 95       	com	r18
+ 104:	25 bb       	out	0x15, r18	; 21
+ 106:	31 97       	sbiw	r30, 0x01	; 1
+ 108:	f1 f7       	brne	.-4      	; 0x106 <serialglow+0x84>
+		
+	glow(x,y);
+	_delay_ms(2);
+	
+
+}
+ 10a:	1f 91       	pop	r17
+ 10c:	0f 91       	pop	r16
+ 10e:	08 95       	ret
+
+00000110 <glow>:
+
+void glow(int a,int b)
+{
+	PORTB=(1<<(a-1));
+ 110:	01 97       	sbiw	r24, 0x01	; 1
+ 112:	21 e0       	ldi	r18, 0x01	; 1
+ 114:	30 e0       	ldi	r19, 0x00	; 0
+ 116:	a9 01       	movw	r20, r18
+ 118:	02 c0       	rjmp	.+4      	; 0x11e <glow+0xe>
+ 11a:	44 0f       	add	r20, r20
+ 11c:	55 1f       	adc	r21, r21
+ 11e:	8a 95       	dec	r24
+ 120:	e2 f7       	brpl	.-8      	; 0x11a <glow+0xa>
+ 122:	48 bb       	out	0x18, r20	; 24
+	
+	PORTC=(0xff) ^ (1<<(b-1));	
+ 124:	61 50       	subi	r22, 0x01	; 1
+ 126:	70 40       	sbci	r23, 0x00	; 0
+ 128:	02 c0       	rjmp	.+4      	; 0x12e <glow+0x1e>
+ 12a:	22 0f       	add	r18, r18
+ 12c:	33 1f       	adc	r19, r19
+ 12e:	6a 95       	dec	r22
+ 130:	e2 f7       	brpl	.-8      	; 0x12a <glow+0x1a>
+ 132:	20 95       	com	r18
+ 134:	25 bb       	out	0x15, r18	; 21
+}
+ 136:	08 95       	ret
+
+00000138 <fade>:
+
+
+void fade(void)
+{
+	
+	PORTB=0x00;
+ 138:	18 ba       	out	0x18, r1	; 24
+	PORTC=0xff;
+ 13a:	8f ef       	ldi	r24, 0xFF	; 255
+ 13c:	85 bb       	out	0x15, r24	; 21
+	
+}
+ 13e:	08 95       	ret
+
+00000140 <i>:
+
+
+void i(void){
+	serialglow(66,65);
+ 140:	82 e4       	ldi	r24, 0x42	; 66
+ 142:	90 e0       	ldi	r25, 0x00	; 0
+ 144:	61 e4       	ldi	r22, 0x41	; 65
+ 146:	70 e0       	ldi	r23, 0x00	; 0
+ 148:	0e 94 41 00 	call	0x82	; 0x82 <serialglow>
+	serialglow(64,55);
+ 14c:	80 e4       	ldi	r24, 0x40	; 64
+ 14e:	90 e0       	ldi	r25, 0x00	; 0
+ 150:	67 e3       	ldi	r22, 0x37	; 55
+ 152:	70 e0       	ldi	r23, 0x00	; 0
+ 154:	0e 94 41 00 	call	0x82	; 0x82 <serialglow>
+
+	serialglow(45,35);
+ 158:	8d e2       	ldi	r24, 0x2D	; 45
+ 15a:	90 e0       	ldi	r25, 0x00	; 0
+ 15c:	63 e2       	ldi	r22, 0x23	; 35
+ 15e:	70 e0       	ldi	r23, 0x00	; 0
+ 160:	0e 94 41 00 	call	0x82	; 0x82 <serialglow>
+
+	serialglow(36,34);
+ 164:	84 e2       	ldi	r24, 0x24	; 36
+ 166:	90 e0       	ldi	r25, 0x00	; 0
+ 168:	62 e2       	ldi	r22, 0x22	; 34
+ 16a:	70 e0       	ldi	r23, 0x00	; 0
+ 16c:	0e 94 41 00 	call	0x82	; 0x82 <serialglow>
+
+
+void fade(void)
+{
+	
+	PORTB=0x00;
+ 170:	18 ba       	out	0x18, r1	; 24
+	PORTC=0xff;
+ 172:	8f ef       	ldi	r24, 0xFF	; 255
+ 174:	85 bb       	out	0x15, r24	; 21
+	serialglow(36,34);
+	fade();
+
+
+
+ 176:	08 95       	ret
+
+00000178 <__divmodhi4>:
+ 178:	97 fb       	bst	r25, 7
+ 17a:	09 2e       	mov	r0, r25
+ 17c:	07 26       	eor	r0, r23
+ 17e:	0a d0       	rcall	.+20     	; 0x194 <__divmodhi4_neg1>
+ 180:	77 fd       	sbrc	r23, 7
+ 182:	04 d0       	rcall	.+8      	; 0x18c <__divmodhi4_neg2>
+ 184:	0c d0       	rcall	.+24     	; 0x19e <__udivmodhi4>
+ 186:	06 d0       	rcall	.+12     	; 0x194 <__divmodhi4_neg1>
+ 188:	00 20       	and	r0, r0
+ 18a:	1a f4       	brpl	.+6      	; 0x192 <__divmodhi4_exit>
+
+0000018c <__divmodhi4_neg2>:
+ 18c:	70 95       	com	r23
+ 18e:	61 95       	neg	r22
+ 190:	7f 4f       	sbci	r23, 0xFF	; 255
+
+00000192 <__divmodhi4_exit>:
+ 192:	08 95       	ret
+
+00000194 <__divmodhi4_neg1>:
+ 194:	f6 f7       	brtc	.-4      	; 0x192 <__divmodhi4_exit>
+ 196:	90 95       	com	r25
+ 198:	81 95       	neg	r24
+ 19a:	9f 4f       	sbci	r25, 0xFF	; 255
+ 19c:	08 95       	ret
+
+0000019e <__udivmodhi4>:
+ 19e:	aa 1b       	sub	r26, r26
+ 1a0:	bb 1b       	sub	r27, r27
+ 1a2:	51 e1       	ldi	r21, 0x11	; 17
+ 1a4:	07 c0       	rjmp	.+14     	; 0x1b4 <__udivmodhi4_ep>
+
+000001a6 <__udivmodhi4_loop>:
+ 1a6:	aa 1f       	adc	r26, r26
+ 1a8:	bb 1f       	adc	r27, r27
+ 1aa:	a6 17       	cp	r26, r22
+ 1ac:	b7 07       	cpc	r27, r23
+ 1ae:	10 f0       	brcs	.+4      	; 0x1b4 <__udivmodhi4_ep>
+ 1b0:	a6 1b       	sub	r26, r22
+ 1b2:	b7 0b       	sbc	r27, r23
+
+000001b4 <__udivmodhi4_ep>:
+ 1b4:	88 1f       	adc	r24, r24
+ 1b6:	99 1f       	adc	r25, r25
+ 1b8:	5a 95       	dec	r21
+ 1ba:	a9 f7       	brne	.-22     	; 0x1a6 <__udivmodhi4_loop>
+ 1bc:	80 95       	com	r24
+ 1be:	90 95       	com	r25
+ 1c0:	bc 01       	movw	r22, r24
+ 1c2:	cd 01       	movw	r24, r26
+ 1c4:	08 95       	ret
+
+000001c6 <_exit>:
+ 1c6:	f8 94       	cli
+
+000001c8 <__stop_program>:
+ 1c8:	ff cf       	rjmp	.-2      	; 0x1c8 <__stop_program>

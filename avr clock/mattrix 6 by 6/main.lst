@@ -1,0 +1,273 @@
+   1               		.file	"main.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	main
+  18               	main:
+  19               	.LFB6:
+  20               	.LM1:
+  21               	/* prologue: function */
+  22               	/* frame size = 0 */
+  23               	.LM2:
+  24 0000 8FEF      		ldi r24,lo8(-1)
+  25 0002 87BB      		out 55-32,r24
+  26               	.LM3:
+  27 0004 84BB      		out 52-32,r24
+  28               	.LM4:
+  29 0006 11BA      		out 49-32,__zero_reg__
+  30               	.LBB28:
+  31               	.LBB29:
+  32               	.LM5:
+  33 0008 18BA      		out 56-32,__zero_reg__
+  34               	.LM6:
+  35 000a 85BB      		out 53-32,r24
+  36               	.LBE29:
+  37               	.LBE28:
+  38               	.LBB30:
+  39               	.LBB31:
+  40               	.LM7:
+  41 000c 81E0      		ldi r24,lo8(1)
+  42 000e 88BB      		out 56-32,r24
+  43               	.LM8:
+  44 0010 8EEF      		ldi r24,lo8(-2)
+  45 0012 85BB      		out 53-32,r24
+  46               	.L2:
+  47 0014 00C0      		rjmp .L2
+  48               	.LBE31:
+  49               	.LBE30:
+  50               	.LFE6:
+  52               	.global	serialglow
+  54               	serialglow:
+  55               	.LFB7:
+  56               	.LM9:
+  57               	.LVL0:
+  58 0016 0F93      		push r16
+  59 0018 1F93      		push r17
+  60               	/* prologue: function */
+  61               	/* frame size = 0 */
+  62 001a FC01      		movw r30,r24
+  63 001c 8B01      		movw r16,r22
+  64               	.LBB32:
+  65               	.LBB33:
+  66               	.LM10:
+  67 001e 6AE0      		ldi r22,lo8(10)
+  68 0020 70E0      		ldi r23,hi8(10)
+  69               	.LVL1:
+  70 0022 0E94 0000 		call __divmodhi4
+  71               	.LVL2:
+  72 0026 6150      		subi r22,lo8(-(-1))
+  73 0028 7040      		sbci r23,hi8(-(-1))
+  74 002a 21E0      		ldi r18,lo8(1)
+  75 002c 30E0      		ldi r19,hi8(1)
+  76 002e A901      		movw r20,r18
+  77 0030 00C0      		rjmp 2f
+  78 0032 440F      	1:	lsl r20
+  79 0034 551F      		rol r21
+  80 0036 6A95      	2:	dec r22
+  81 0038 02F4      		brpl 1b
+  82 003a 48BB      		out 56-32,r20
+  83               	.LM11:
+  84 003c CF01      		movw r24,r30
+  85 003e 6AE0      		ldi r22,lo8(10)
+  86 0040 70E0      		ldi r23,hi8(10)
+  87 0042 0E94 0000 		call __divmodhi4
+  88 0046 0197      		sbiw r24,1
+  89 0048 A901      		movw r20,r18
+  90 004a 00C0      		rjmp 2f
+  91 004c 440F      	1:	lsl r20
+  92 004e 551F      		rol r21
+  93 0050 8A95      	2:	dec r24
+  94 0052 02F4      		brpl 1b
+  95 0054 CA01      		movw r24,r20
+  96 0056 8095      		com r24
+  97 0058 85BB      		out 53-32,r24
+  98               	.LBE33:
+  99               	.LBE32:
+ 100               	.LBB34:
+ 101               	.LBB35:
+ 102               	.LBB36:
+ 103               	.LBB37:
+ 104               	.LM12:
+ 105 005a E0EA      		ldi r30,lo8(4000)
+ 106 005c FFE0      		ldi r31,hi8(4000)
+ 107               	.LVL3:
+ 108 005e CF01      		movw r24,r30
+ 109               	.LVL4:
+ 110               	/* #APP */
+ 111               	 ;  105 "e:/programmes file/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h" 1
+ 112 0060 0197      		1: sbiw r24,1
+ 113 0062 01F4      		brne 1b
+ 114               	 ;  0 "" 2
+ 115               	/* #NOAPP */
+ 116               	.LBE37:
+ 117               	.LBE36:
+ 118               	.LBE35:
+ 119               	.LBE34:
+ 120               	.LBB38:
+ 121               	.LBB39:
+ 122               	.LM13:
+ 123 0064 C801      		movw r24,r16
+ 124               	.LVL5:
+ 125 0066 6AE0      		ldi r22,lo8(10)
+ 126 0068 70E0      		ldi r23,hi8(10)
+ 127 006a 0E94 0000 		call __divmodhi4
+ 128 006e 6150      		subi r22,lo8(-(-1))
+ 129 0070 7040      		sbci r23,hi8(-(-1))
+ 130 0072 C901      		movw r24,r18
+ 131 0074 00C0      		rjmp 2f
+ 132 0076 880F      	1:	lsl r24
+ 133 0078 991F      		rol r25
+ 134 007a 6A95      	2:	dec r22
+ 135 007c 02F4      		brpl 1b
+ 136 007e 88BB      		out 56-32,r24
+ 137               	.LM14:
+ 138 0080 C801      		movw r24,r16
+ 139 0082 6AE0      		ldi r22,lo8(10)
+ 140 0084 70E0      		ldi r23,hi8(10)
+ 141 0086 0E94 0000 		call __divmodhi4
+ 142 008a 0197      		sbiw r24,1
+ 143 008c 00C0      		rjmp 2f
+ 144 008e 220F      	1:	lsl r18
+ 145 0090 331F      		rol r19
+ 146 0092 8A95      	2:	dec r24
+ 147 0094 02F4      		brpl 1b
+ 148 0096 2095      		com r18
+ 149 0098 25BB      		out 53-32,r18
+ 150               	.LBE39:
+ 151               	.LBE38:
+ 152               	.LBB40:
+ 153               	.LBB41:
+ 154               	.LBB42:
+ 155               	.LBB43:
+ 156               	.LM15:
+ 157               	/* #APP */
+ 158               	 ;  105 "e:/programmes file/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h" 1
+ 159 009a 3197      		1: sbiw r30,1
+ 160 009c 01F4      		brne 1b
+ 161               	 ;  0 "" 2
+ 162               	.LVL6:
+ 163               	/* epilogue start */
+ 164               	/* #NOAPP */
+ 165               	.LBE43:
+ 166               	.LBE42:
+ 167               	.LBE41:
+ 168               	.LBE40:
+ 169               	.LM16:
+ 170 009e 1F91      		pop r17
+ 171 00a0 0F91      		pop r16
+ 172               	.LVL7:
+ 173 00a2 0895      		ret
+ 174               	.LFE7:
+ 176               	.global	glow
+ 178               	glow:
+ 179               	.LFB8:
+ 180               	.LM17:
+ 181               	.LVL8:
+ 182               	/* prologue: function */
+ 183               	/* frame size = 0 */
+ 184               	.LM18:
+ 185 00a4 0197      		sbiw r24,1
+ 186               	.LVL9:
+ 187 00a6 21E0      		ldi r18,lo8(1)
+ 188 00a8 30E0      		ldi r19,hi8(1)
+ 189 00aa A901      		movw r20,r18
+ 190 00ac 00C0      		rjmp 2f
+ 191 00ae 440F      	1:	lsl r20
+ 192 00b0 551F      		rol r21
+ 193 00b2 8A95      	2:	dec r24
+ 194 00b4 02F4      		brpl 1b
+ 195 00b6 48BB      		out 56-32,r20
+ 196               	.LM19:
+ 197 00b8 6150      		subi r22,lo8(-(-1))
+ 198 00ba 7040      		sbci r23,hi8(-(-1))
+ 199               	.LVL10:
+ 200 00bc 00C0      		rjmp 2f
+ 201 00be 220F      	1:	lsl r18
+ 202 00c0 331F      		rol r19
+ 203 00c2 6A95      	2:	dec r22
+ 204 00c4 02F4      		brpl 1b
+ 205 00c6 2095      		com r18
+ 206 00c8 25BB      		out 53-32,r18
+ 207               	/* epilogue start */
+ 208               	.LM20:
+ 209 00ca 0895      		ret
+ 210               	.LFE8:
+ 212               	.global	fade
+ 214               	fade:
+ 215               	.LFB9:
+ 216               	.LM21:
+ 217               	/* prologue: function */
+ 218               	/* frame size = 0 */
+ 219               	.LM22:
+ 220 00cc 18BA      		out 56-32,__zero_reg__
+ 221               	.LM23:
+ 222 00ce 8FEF      		ldi r24,lo8(-1)
+ 223 00d0 85BB      		out 53-32,r24
+ 224               	/* epilogue start */
+ 225               	.LM24:
+ 226 00d2 0895      		ret
+ 227               	.LFE9:
+ 229               	.global	i
+ 231               	i:
+ 232               	.LFB10:
+ 233               	.LM25:
+ 234               	/* prologue: function */
+ 235               	/* frame size = 0 */
+ 236               	.LM26:
+ 237 00d4 82E4      		ldi r24,lo8(66)
+ 238 00d6 90E0      		ldi r25,hi8(66)
+ 239 00d8 61E4      		ldi r22,lo8(65)
+ 240 00da 70E0      		ldi r23,hi8(65)
+ 241 00dc 0E94 0000 		call serialglow
+ 242               	.LM27:
+ 243 00e0 80E4      		ldi r24,lo8(64)
+ 244 00e2 90E0      		ldi r25,hi8(64)
+ 245 00e4 67E3      		ldi r22,lo8(55)
+ 246 00e6 70E0      		ldi r23,hi8(55)
+ 247 00e8 0E94 0000 		call serialglow
+ 248               	.LM28:
+ 249 00ec 8DE2      		ldi r24,lo8(45)
+ 250 00ee 90E0      		ldi r25,hi8(45)
+ 251 00f0 63E2      		ldi r22,lo8(35)
+ 252 00f2 70E0      		ldi r23,hi8(35)
+ 253 00f4 0E94 0000 		call serialglow
+ 254               	.LM29:
+ 255 00f8 84E2      		ldi r24,lo8(36)
+ 256 00fa 90E0      		ldi r25,hi8(36)
+ 257 00fc 62E2      		ldi r22,lo8(34)
+ 258 00fe 70E0      		ldi r23,hi8(34)
+ 259 0100 0E94 0000 		call serialglow
+ 260               	.LBB44:
+ 261               	.LBB45:
+ 262               	.LM30:
+ 263 0104 18BA      		out 56-32,__zero_reg__
+ 264               	.LM31:
+ 265 0106 8FEF      		ldi r24,lo8(-1)
+ 266 0108 85BB      		out 53-32,r24
+ 267               	/* epilogue start */
+ 268               	.LBE45:
+ 269               	.LBE44:
+ 270               	.LM32:
+ 271 010a 0895      		ret
+ 272               	.LFE10:
+ 330               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\Sushil\AppData\Local\Temp/cccyPgY4.s:2      *ABS*:0000003f __SREG__
+C:\Users\Sushil\AppData\Local\Temp/cccyPgY4.s:3      *ABS*:0000003e __SP_H__
+C:\Users\Sushil\AppData\Local\Temp/cccyPgY4.s:4      *ABS*:0000003d __SP_L__
+C:\Users\Sushil\AppData\Local\Temp/cccyPgY4.s:5      *ABS*:00000034 __CCP__
+C:\Users\Sushil\AppData\Local\Temp/cccyPgY4.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\Sushil\AppData\Local\Temp/cccyPgY4.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\Sushil\AppData\Local\Temp/cccyPgY4.s:18     .text:00000000 main
+C:\Users\Sushil\AppData\Local\Temp/cccyPgY4.s:54     .text:00000016 serialglow
+C:\Users\Sushil\AppData\Local\Temp/cccyPgY4.s:178    .text:000000a4 glow
+C:\Users\Sushil\AppData\Local\Temp/cccyPgY4.s:214    .text:000000cc fade
+C:\Users\Sushil\AppData\Local\Temp/cccyPgY4.s:231    .text:000000d4 i
+
+UNDEFINED SYMBOLS
+__divmodhi4

@@ -1,0 +1,879 @@
+
+main.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000412  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .debug_aranges 00000020  00000000  00000000  00000466  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  2 .debug_pubnames 00000100  00000000  00000000  00000486  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_info   00000574  00000000  00000000  00000586  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_abbrev 000001ef  00000000  00000000  00000afa  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_line   000005cb  00000000  00000000  00000ce9  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_frame  00000100  00000000  00000000  000012b4  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    000001b6  00000000  00000000  000013b4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_loc    000002b6  00000000  00000000  0000156a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_ranges 00000090  00000000  00000000  00001820  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 d7 01 	call	0x3ae	; 0x3ae <main>
+  64:	0c 94 07 02 	jmp	0x40e	; 0x40e <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <I2C_Start>:
+byte I2C_SendAddr(byte addr); //i have change the addr only to (byte addr)
+
+
+byte I2C_Start(void)                 // generate start condition
+{
+   TWCR = TW_START;             //send start condition
+  6c:	84 ea       	ldi	r24, 0xA4	; 164
+  6e:	86 bf       	out	0x36, r24	; 54
+   while(!TW_READY);            // wait
+  70:	06 b6       	in	r0, 0x36	; 54
+  72:	07 fe       	sbrs	r0, 7
+  74:	fd cf       	rjmp	.-6      	; 0x70 <I2C_Start+0x4>
+   return (TW_STATUS == 0x08);  // return 1 if found otherwise 0
+  76:	81 b1       	in	r24, 0x01	; 1
+  78:	20 e0       	ldi	r18, 0x00	; 0
+  7a:	30 e0       	ldi	r19, 0x00	; 0
+  7c:	88 7f       	andi	r24, 0xF8	; 248
+  7e:	88 30       	cpi	r24, 0x08	; 8
+  80:	11 f4       	brne	.+4      	; 0x86 <I2C_Start+0x1a>
+  82:	21 e0       	ldi	r18, 0x01	; 1
+  84:	30 e0       	ldi	r19, 0x00	; 0
+}
+  86:	c9 01       	movw	r24, r18
+  88:	08 95       	ret
+
+0000008a <I2C_SendAddr>:
+
+byte I2C_SendAddr( byte addr)            // send bus address of slave
+{
+   TWDR = addr;                    //load device bus address
+  8a:	83 b9       	out	0x03, r24	; 3
+   TWCR = TW_SEND;                 //and send it 
+  8c:	84 e8       	ldi	r24, 0x84	; 132
+  8e:	86 bf       	out	0x36, r24	; 54
+   while (!TW_READY);              //wait   
+  90:	06 b6       	in	r0, 0x36	; 54
+  92:	07 fe       	sbrs	r0, 7
+  94:	fd cf       	rjmp	.-6      	; 0x90 <I2C_SendAddr+0x6>
+   return (TW_STATUS == 0x18);     //return 1 if found otherwise 0
+  96:	81 b1       	in	r24, 0x01	; 1
+  98:	20 e0       	ldi	r18, 0x00	; 0
+  9a:	30 e0       	ldi	r19, 0x00	; 0
+  9c:	88 7f       	andi	r24, 0xF8	; 248
+  9e:	88 31       	cpi	r24, 0x18	; 24
+  a0:	11 f4       	brne	.+4      	; 0xa6 <I2C_SendAddr+0x1c>
+  a2:	21 e0       	ldi	r18, 0x01	; 1
+  a4:	30 e0       	ldi	r19, 0x00	; 0
+}
+  a6:	c9 01       	movw	r24, r18
+  a8:	08 95       	ret
+
+000000aa <I2C_Write>:
+
+
+byte I2C_Write(byte data)            // send a data byte to slave
+{
+   TWDR = data;                    //load data to be send 
+  aa:	83 b9       	out	0x03, r24	; 3
+   TWCR = TW_SEND;                 //and send it 
+  ac:	84 e8       	ldi	r24, 0x84	; 132
+  ae:	86 bf       	out	0x36, r24	; 54
+   while (!TW_READY);              //wait   
+  b0:	06 b6       	in	r0, 0x36	; 54
+  b2:	07 fe       	sbrs	r0, 7
+  b4:	fd cf       	rjmp	.-6      	; 0xb0 <I2C_Write+0x6>
+   return (TW_STATUS == 0x28);     //return 1 if found otherwise 0
+  b6:	81 b1       	in	r24, 0x01	; 1
+  b8:	20 e0       	ldi	r18, 0x00	; 0
+  ba:	30 e0       	ldi	r19, 0x00	; 0
+  bc:	88 7f       	andi	r24, 0xF8	; 248
+  be:	88 32       	cpi	r24, 0x28	; 40
+  c0:	11 f4       	brne	.+4      	; 0xc6 <I2C_Write+0x1c>
+  c2:	21 e0       	ldi	r18, 0x01	; 1
+  c4:	30 e0       	ldi	r19, 0x00	; 0
+}
+  c6:	c9 01       	movw	r24, r18
+  c8:	08 95       	ret
+
+000000ca <I2C_ReadACK>:
+
+byte I2C_ReadACK(void)
+{
+   TWCR = TW_ACK;
+  ca:	84 ec       	ldi	r24, 0xC4	; 196
+  cc:	86 bf       	out	0x36, r24	; 54
+   while(!TW_READY);
+  ce:	06 b6       	in	r0, 0x36	; 54
+  d0:	07 fe       	sbrs	r0, 7
+  d2:	fd cf       	rjmp	.-6      	; 0xce <I2C_ReadACK+0x4>
+   return TWDR;
+  d4:	83 b1       	in	r24, 0x03	; 3
+}
+  d6:	90 e0       	ldi	r25, 0x00	; 0
+  d8:	08 95       	ret
+
+000000da <I2C_ReadNACK>:
+
+byte I2C_ReadNACK(void)                // reads a data byte from slave 
+{
+   TWCR = TW_NACK;                  // nack = not reading more data
+  da:	84 e8       	ldi	r24, 0x84	; 132
+  dc:	86 bf       	out	0x36, r24	; 54
+   while (!TW_READY);                // wait
+  de:	06 b6       	in	r0, 0x36	; 54
+  e0:	07 fe       	sbrs	r0, 7
+  e2:	fd cf       	rjmp	.-6      	; 0xde <I2C_ReadNACK+0x4>
+   return TWDR;
+  e4:	83 b1       	in	r24, 0x03	; 3
+}
+  e6:	90 e0       	ldi	r25, 0x00	; 0
+  e8:	08 95       	ret
+
+000000ea <I2C_WriteRegister>:
+   I2C_Write(data);
+   I2C_Stop();
+}*/
+
+void I2C_WriteRegister (byte deviceRegister , byte data)
+{
+  ea:	98 2f       	mov	r25, r24
+byte I2C_SendAddr(byte addr); //i have change the addr only to (byte addr)
+
+
+byte I2C_Start(void)                 // generate start condition
+{
+   TWCR = TW_START;             //send start condition
+  ec:	84 ea       	ldi	r24, 0xA4	; 164
+  ee:	86 bf       	out	0x36, r24	; 54
+   while(!TW_READY);            // wait
+  f0:	06 b6       	in	r0, 0x36	; 54
+  f2:	07 fe       	sbrs	r0, 7
+  f4:	fd cf       	rjmp	.-6      	; 0xf0 <I2C_WriteRegister+0x6>
+   return (TW_STATUS == 0x08);  // return 1 if found otherwise 0
+  f6:	81 b1       	in	r24, 0x01	; 1
+}
+
+byte I2C_SendAddr( byte addr)            // send bus address of slave
+{
+   TWDR = addr;                    //load device bus address
+  f8:	80 ed       	ldi	r24, 0xD0	; 208
+  fa:	83 b9       	out	0x03, r24	; 3
+   TWCR = TW_SEND;                 //and send it 
+  fc:	84 e8       	ldi	r24, 0x84	; 132
+  fe:	86 bf       	out	0x36, r24	; 54
+   while (!TW_READY);              //wait   
+ 100:	06 b6       	in	r0, 0x36	; 54
+ 102:	07 fe       	sbrs	r0, 7
+ 104:	fd cf       	rjmp	.-6      	; 0x100 <I2C_WriteRegister+0x16>
+   return (TW_STATUS == 0x18);     //return 1 if found otherwise 0
+ 106:	81 b1       	in	r24, 0x01	; 1
+}
+
+
+byte I2C_Write(byte data)            // send a data byte to slave
+{
+   TWDR = data;                    //load data to be send 
+ 108:	93 b9       	out	0x03, r25	; 3
+   TWCR = TW_SEND;                 //and send it 
+ 10a:	84 e8       	ldi	r24, 0x84	; 132
+ 10c:	86 bf       	out	0x36, r24	; 54
+   while (!TW_READY);              //wait   
+ 10e:	06 b6       	in	r0, 0x36	; 54
+ 110:	07 fe       	sbrs	r0, 7
+ 112:	fd cf       	rjmp	.-6      	; 0x10e <I2C_WriteRegister+0x24>
+   return (TW_STATUS == 0x28);     //return 1 if found otherwise 0
+ 114:	81 b1       	in	r24, 0x01	; 1
+}
+
+
+byte I2C_Write(byte data)            // send a data byte to slave
+{
+   TWDR = data;                    //load data to be send 
+ 116:	63 b9       	out	0x03, r22	; 3
+   TWCR = TW_SEND;                 //and send it 
+ 118:	84 e8       	ldi	r24, 0x84	; 132
+ 11a:	86 bf       	out	0x36, r24	; 54
+   while (!TW_READY);              //wait   
+ 11c:	06 b6       	in	r0, 0x36	; 54
+ 11e:	07 fe       	sbrs	r0, 7
+ 120:	fd cf       	rjmp	.-6      	; 0x11c <I2C_WriteRegister+0x32>
+   return (TW_STATUS == 0x28);     //return 1 if found otherwise 0
+ 122:	81 b1       	in	r24, 0x01	; 1
+{
+   I2C_Start();               
+   I2C_SendAddr(DS1307);      //send bus address
+   I2C_Write(deviceRegister); //first byte = device register aaddress
+   I2C_Write(data);           //second byte = data for device register
+   I2C_Stop();
+ 124:	84 e9       	ldi	r24, 0x94	; 148
+ 126:	86 bf       	out	0x36, r24	; 54
+}
+ 128:	08 95       	ret
+
+0000012a <I2C_ReadRegister>:
+
+byte I2C_ReadRegister(byte deviceRegister)
+{
+ 12a:	98 2f       	mov	r25, r24
+byte I2C_SendAddr(byte addr); //i have change the addr only to (byte addr)
+
+
+byte I2C_Start(void)                 // generate start condition
+{
+   TWCR = TW_START;             //send start condition
+ 12c:	84 ea       	ldi	r24, 0xA4	; 164
+ 12e:	86 bf       	out	0x36, r24	; 54
+   while(!TW_READY);            // wait
+ 130:	06 b6       	in	r0, 0x36	; 54
+ 132:	07 fe       	sbrs	r0, 7
+ 134:	fd cf       	rjmp	.-6      	; 0x130 <I2C_ReadRegister+0x6>
+   return (TW_STATUS == 0x08);  // return 1 if found otherwise 0
+ 136:	81 b1       	in	r24, 0x01	; 1
+}
+
+byte I2C_SendAddr( byte addr)            // send bus address of slave
+{
+   TWDR = addr;                    //load device bus address
+ 138:	80 ed       	ldi	r24, 0xD0	; 208
+ 13a:	83 b9       	out	0x03, r24	; 3
+   TWCR = TW_SEND;                 //and send it 
+ 13c:	84 e8       	ldi	r24, 0x84	; 132
+ 13e:	86 bf       	out	0x36, r24	; 54
+   while (!TW_READY);              //wait   
+ 140:	06 b6       	in	r0, 0x36	; 54
+ 142:	07 fe       	sbrs	r0, 7
+ 144:	fd cf       	rjmp	.-6      	; 0x140 <I2C_ReadRegister+0x16>
+   return (TW_STATUS == 0x18);     //return 1 if found otherwise 0
+ 146:	81 b1       	in	r24, 0x01	; 1
+}
+
+
+byte I2C_Write(byte data)            // send a data byte to slave
+{
+   TWDR = data;                    //load data to be send 
+ 148:	93 b9       	out	0x03, r25	; 3
+   TWCR = TW_SEND;                 //and send it 
+ 14a:	84 e8       	ldi	r24, 0x84	; 132
+ 14c:	86 bf       	out	0x36, r24	; 54
+   while (!TW_READY);              //wait   
+ 14e:	06 b6       	in	r0, 0x36	; 54
+ 150:	07 fe       	sbrs	r0, 7
+ 152:	fd cf       	rjmp	.-6      	; 0x14e <I2C_ReadRegister+0x24>
+   return (TW_STATUS == 0x28);     //return 1 if found otherwise 0
+ 154:	81 b1       	in	r24, 0x01	; 1
+byte I2C_SendAddr(byte addr); //i have change the addr only to (byte addr)
+
+
+byte I2C_Start(void)                 // generate start condition
+{
+   TWCR = TW_START;             //send start condition
+ 156:	84 ea       	ldi	r24, 0xA4	; 164
+ 158:	86 bf       	out	0x36, r24	; 54
+   while(!TW_READY);            // wait
+ 15a:	06 b6       	in	r0, 0x36	; 54
+ 15c:	07 fe       	sbrs	r0, 7
+ 15e:	fd cf       	rjmp	.-6      	; 0x15a <I2C_ReadRegister+0x30>
+   return (TW_STATUS == 0x08);  // return 1 if found otherwise 0
+ 160:	81 b1       	in	r24, 0x01	; 1
+}
+
+byte I2C_SendAddr( byte addr)            // send bus address of slave
+{
+   TWDR = addr;                    //load device bus address
+ 162:	81 ed       	ldi	r24, 0xD1	; 209
+ 164:	83 b9       	out	0x03, r24	; 3
+   TWCR = TW_SEND;                 //and send it 
+ 166:	84 e8       	ldi	r24, 0x84	; 132
+ 168:	86 bf       	out	0x36, r24	; 54
+   while (!TW_READY);              //wait   
+ 16a:	06 b6       	in	r0, 0x36	; 54
+ 16c:	07 fe       	sbrs	r0, 7
+ 16e:	fd cf       	rjmp	.-6      	; 0x16a <I2C_ReadRegister+0x40>
+   return (TW_STATUS == 0x18);     //return 1 if found otherwise 0
+ 170:	81 b1       	in	r24, 0x01	; 1
+   return TWDR;
+}
+
+byte I2C_ReadNACK(void)                // reads a data byte from slave 
+{
+   TWCR = TW_NACK;                  // nack = not reading more data
+ 172:	84 e8       	ldi	r24, 0x84	; 132
+ 174:	86 bf       	out	0x36, r24	; 54
+   while (!TW_READY);                // wait
+ 176:	06 b6       	in	r0, 0x36	; 54
+ 178:	07 fe       	sbrs	r0, 7
+ 17a:	fd cf       	rjmp	.-6      	; 0x176 <I2C_ReadRegister+0x4c>
+   return TWDR;
+ 17c:	83 b1       	in	r24, 0x03	; 3
+   I2C_SendAddr(DS1307);       //send device bus address
+   I2C_Write(deviceRegister);  //set register pointer
+   I2C_Start(); 
+   I2C_SendAddr(DS1307+READ);  //restart as a read operation
+   data = I2C_ReadNACK();      //read the register data
+   I2C_Stop();                 //stop
+ 17e:	94 e9       	ldi	r25, 0x94	; 148
+ 180:	96 bf       	out	0x36, r25	; 54
+   return data;
+}
+ 182:	90 e0       	ldi	r25, 0x00	; 0
+ 184:	08 95       	ret
+
+00000186 <I2C_Init>:
+
+void I2C_Init(void)
+{
+   TWSR =0;
+ 186:	11 b8       	out	0x01, r1	; 1
+   TWBR = ((F_CPU/F_SCL)-16)/2;
+ 188:	80 e2       	ldi	r24, 0x20	; 32
+ 18a:	80 b9       	out	0x00, r24	; 0
+   
+}
+ 18c:	08 95       	ret
+
+0000018e <I2C_Detect>:
+
+byte I2C_Detect(byte addr)
+{
+ 18e:	98 2f       	mov	r25, r24
+   TWCR = TW_START;
+ 190:	84 ea       	ldi	r24, 0xA4	; 164
+ 192:	86 bf       	out	0x36, r24	; 54
+   while(!TW_READY);
+ 194:	06 b6       	in	r0, 0x36	; 54
+ 196:	07 fe       	sbrs	r0, 7
+ 198:	fd cf       	rjmp	.-6      	; 0x194 <I2C_Detect+0x6>
+      TWDR = addr;
+ 19a:	93 b9       	out	0x03, r25	; 3
+   TWCR = TW_SEND;
+ 19c:	84 e8       	ldi	r24, 0x84	; 132
+ 19e:	86 bf       	out	0x36, r24	; 54
+   while(!TW_READY);
+ 1a0:	06 b6       	in	r0, 0x36	; 54
+ 1a2:	07 fe       	sbrs	r0, 7
+ 1a4:	fd cf       	rjmp	.-6      	; 0x1a0 <I2C_Detect+0x12>
+   return (TW_STATUS == 0x18);
+ 1a6:	81 b1       	in	r24, 0x01	; 1
+ 1a8:	20 e0       	ldi	r18, 0x00	; 0
+ 1aa:	30 e0       	ldi	r19, 0x00	; 0
+ 1ac:	88 7f       	andi	r24, 0xF8	; 248
+ 1ae:	88 31       	cpi	r24, 0x18	; 24
+ 1b0:	11 f4       	brne	.+4      	; 0x1b6 <I2C_Detect+0x28>
+ 1b2:	21 e0       	ldi	r18, 0x01	; 1
+ 1b4:	30 e0       	ldi	r19, 0x00	; 0
+}
+ 1b6:	c9 01       	movw	r24, r18
+ 1b8:	08 95       	ret
+
+000001ba <DS1307_GetTime>:
+#define DAYS_REGISTER    0x04
+#define MONTHS_REGISTER  0x05
+#define YEARS_REGISTER   0x06
+
+void DS1307_GetTime(byte *hours, byte *minutes, byte *seconds)
+{
+ 1ba:	ef 92       	push	r14
+ 1bc:	ff 92       	push	r15
+ 1be:	0f 93       	push	r16
+ 1c0:	1f 93       	push	r17
+ 1c2:	cf 93       	push	r28
+ 1c4:	df 93       	push	r29
+ 1c6:	ec 01       	movw	r28, r24
+ 1c8:	8b 01       	movw	r16, r22
+ 1ca:	7a 01       	movw	r14, r20
+   *hours   = I2C_ReadRegister(HOURS_REGISTER); //*hours   = I2C_ReadRegister(DS1307,HOURS_REGISTER);
+ 1cc:	82 e0       	ldi	r24, 0x02	; 2
+ 1ce:	90 e0       	ldi	r25, 0x00	; 0
+ 1d0:	0e 94 95 00 	call	0x12a	; 0x12a <I2C_ReadRegister>
+ 1d4:	99 83       	std	Y+1, r25	; 0x01
+ 1d6:	88 83       	st	Y, r24
+   *minutes = I2C_ReadRegister(MINUTES_REGISTER);//*minutes = I2C_ReadRegister(DS1307,MINUTES_REGISTER);
+ 1d8:	81 e0       	ldi	r24, 0x01	; 1
+ 1da:	90 e0       	ldi	r25, 0x00	; 0
+ 1dc:	0e 94 95 00 	call	0x12a	; 0x12a <I2C_ReadRegister>
+ 1e0:	f8 01       	movw	r30, r16
+ 1e2:	91 83       	std	Z+1, r25	; 0x01
+ 1e4:	80 83       	st	Z, r24
+   *seconds = I2C_ReadRegister(SECONDS_REGISTER);// *seconds = I2C_ReadRegister(DS1307,SECONDS_REGISTER);
+ 1e6:	80 e0       	ldi	r24, 0x00	; 0
+ 1e8:	90 e0       	ldi	r25, 0x00	; 0
+ 1ea:	0e 94 95 00 	call	0x12a	; 0x12a <I2C_ReadRegister>
+ 1ee:	f7 01       	movw	r30, r14
+ 1f0:	91 83       	std	Z+1, r25	; 0x01
+ 1f2:	80 83       	st	Z, r24
+   if(*hours & 0x04)           //12hrs mode
+ 1f4:	88 81       	ld	r24, Y
+ 1f6:	99 81       	ldd	r25, Y+1	; 0x01
+ 1f8:	82 ff       	sbrs	r24, 2
+ 1fa:	03 c0       	rjmp	.+6      	; 0x202 <DS1307_GetTime+0x48>
+   {
+      *hours &= 0x1F;
+ 1fc:	8f 71       	andi	r24, 0x1F	; 31
+ 1fe:	90 70       	andi	r25, 0x00	; 0
+ 200:	02 c0       	rjmp	.+4      	; 0x206 <DS1307_GetTime+0x4c>
+   }
+    else
+   {
+    *hours &= 0x3F; 
+ 202:	8f 73       	andi	r24, 0x3F	; 63
+ 204:	90 70       	andi	r25, 0x00	; 0
+ 206:	99 83       	std	Y+1, r25	; 0x01
+ 208:	88 83       	st	Y, r24
+   }
+}
+ 20a:	df 91       	pop	r29
+ 20c:	cf 91       	pop	r28
+ 20e:	1f 91       	pop	r17
+ 210:	0f 91       	pop	r16
+ 212:	ff 90       	pop	r15
+ 214:	ef 90       	pop	r14
+ 216:	08 95       	ret
+
+00000218 <DS1307_GetDate>:
+
+void DS1307_GetDate(byte *months, byte *days, byte *years)
+{
+ 218:	cf 92       	push	r12
+ 21a:	df 92       	push	r13
+ 21c:	ef 92       	push	r14
+ 21e:	ff 92       	push	r15
+ 220:	0f 93       	push	r16
+ 222:	1f 93       	push	r17
+ 224:	8c 01       	movw	r16, r24
+ 226:	7b 01       	movw	r14, r22
+ 228:	6a 01       	movw	r12, r20
+   *months = I2C_ReadRegister(MONTHS_REGISTER); //   *months = I2C_ReadRegister(DS1307,MONTHS_REGISTER);
+ 22a:	85 e0       	ldi	r24, 0x05	; 5
+ 22c:	90 e0       	ldi	r25, 0x00	; 0
+ 22e:	0e 94 95 00 	call	0x12a	; 0x12a <I2C_ReadRegister>
+ 232:	f8 01       	movw	r30, r16
+ 234:	91 83       	std	Z+1, r25	; 0x01
+ 236:	80 83       	st	Z, r24
+   *days   = I2C_ReadRegister(DAYS_REGISTER); //*days   = I2C_ReadRegister(DS1307,DAYS_REGISTER);
+ 238:	84 e0       	ldi	r24, 0x04	; 4
+ 23a:	90 e0       	ldi	r25, 0x00	; 0
+ 23c:	0e 94 95 00 	call	0x12a	; 0x12a <I2C_ReadRegister>
+ 240:	f7 01       	movw	r30, r14
+ 242:	91 83       	std	Z+1, r25	; 0x01
+ 244:	80 83       	st	Z, r24
+   *years  = I2C_ReadRegister(YEARS_REGISTER);  //*years  = I2C_ReadRegister(DS1307,YEARS_REGISTER);
+ 246:	86 e0       	ldi	r24, 0x06	; 6
+ 248:	90 e0       	ldi	r25, 0x00	; 0
+ 24a:	0e 94 95 00 	call	0x12a	; 0x12a <I2C_ReadRegister>
+ 24e:	f6 01       	movw	r30, r12
+ 250:	91 83       	std	Z+1, r25	; 0x01
+ 252:	80 83       	st	Z, r24
+}
+ 254:	1f 91       	pop	r17
+ 256:	0f 91       	pop	r16
+ 258:	ff 90       	pop	r15
+ 25a:	ef 90       	pop	r14
+ 25c:	df 90       	pop	r13
+ 25e:	cf 90       	pop	r12
+ 260:	08 95       	ret
+
+00000262 <SetTimeDate>:
+
+void SetTimeDate(void)
+{
+   I2C_WriteRegister(MONTHS_REGISTER,0x08); //I2C_WriteRegister(DS1307,MONTHS_REGISTER,0x08);
+ 262:	85 e0       	ldi	r24, 0x05	; 5
+ 264:	90 e0       	ldi	r25, 0x00	; 0
+ 266:	68 e0       	ldi	r22, 0x08	; 8
+ 268:	70 e0       	ldi	r23, 0x00	; 0
+ 26a:	0e 94 75 00 	call	0xea	; 0xea <I2C_WriteRegister>
+   I2C_WriteRegister(DAYS_REGISTER,0x31); //I2C_WriteRegister(DS1307,DAYS_REGISTER,0x31);
+ 26e:	84 e0       	ldi	r24, 0x04	; 4
+ 270:	90 e0       	ldi	r25, 0x00	; 0
+ 272:	61 e3       	ldi	r22, 0x31	; 49
+ 274:	70 e0       	ldi	r23, 0x00	; 0
+ 276:	0e 94 75 00 	call	0xea	; 0xea <I2C_WriteRegister>
+   I2C_WriteRegister(YEARS_REGISTER,0x13);  //I2C_WriteRegister(DS1307,YEARS_REGISTER,0x13);
+ 27a:	86 e0       	ldi	r24, 0x06	; 6
+ 27c:	90 e0       	ldi	r25, 0x00	; 0
+ 27e:	63 e1       	ldi	r22, 0x13	; 19
+ 280:	70 e0       	ldi	r23, 0x00	; 0
+ 282:	0e 94 75 00 	call	0xea	; 0xea <I2C_WriteRegister>
+   I2C_WriteRegister(HOURS_REGISTER,0x08+0x04); //I2C_WriteRegister(DS1307,HOURS_REGISTER,0x08+0x04);
+ 286:	82 e0       	ldi	r24, 0x02	; 2
+ 288:	90 e0       	ldi	r25, 0x00	; 0
+ 28a:	6c e0       	ldi	r22, 0x0C	; 12
+ 28c:	70 e0       	ldi	r23, 0x00	; 0
+ 28e:	0e 94 75 00 	call	0xea	; 0xea <I2C_WriteRegister>
+   I2C_WriteRegister(MINUTES_REGISTER,0x51); //I2C_WriteRegister(DS1307,MINUTES_REGISTER,0x51);
+ 292:	81 e0       	ldi	r24, 0x01	; 1
+ 294:	90 e0       	ldi	r25, 0x00	; 0
+ 296:	61 e5       	ldi	r22, 0x51	; 81
+ 298:	70 e0       	ldi	r23, 0x00	; 0
+ 29a:	0e 94 75 00 	call	0xea	; 0xea <I2C_WriteRegister>
+   I2C_WriteRegister(SECONDS_REGISTER,0x00); //I2C_WriteRegister(DS1307,SECONDS_REGISTER,0x00);
+ 29e:	80 e0       	ldi	r24, 0x00	; 0
+ 2a0:	90 e0       	ldi	r25, 0x00	; 0
+ 2a2:	60 e0       	ldi	r22, 0x00	; 0
+ 2a4:	70 e0       	ldi	r23, 0x00	; 0
+ 2a6:	0e 94 75 00 	call	0xea	; 0xea <I2C_WriteRegister>
+}
+ 2aa:	08 95       	ret
+
+000002ac <SetTime>:
+
+void SetTime(void)
+{  
+ 2ac:	cf 92       	push	r12
+ 2ae:	df 92       	push	r13
+ 2b0:	ef 92       	push	r14
+ 2b2:	ff 92       	push	r15
+ 2b4:	0f 93       	push	r16
+ 2b6:	1f 93       	push	r17
+ 2b8:	cf 93       	push	r28
+ 2ba:	df 93       	push	r29
+ 2bc:	01 e0       	ldi	r16, 0x01	; 1
+ 2be:	10 e0       	ldi	r17, 0x00	; 0
+ 2c0:	ff 24       	eor	r15, r15
+ 2c2:	f3 94       	inc	r15
+ 2c4:	c0 e0       	ldi	r28, 0x00	; 0
+ 2c6:	d0 e0       	ldi	r29, 0x00	; 0
+ 2c8:	ee 24       	eor	r14, r14
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+ 2ca:	88 ec       	ldi	r24, 0xC8	; 200
+ 2cc:	c8 2e       	mov	r12, r24
+ 2ce:	d1 2c       	mov	r13, r1
+ 2d0:	43 c0       	rjmp	.+134    	; 0x358 <SetTime+0xac>
+  byte b = 0x00;
+  uint8_t j=0;
+
+   while((bit_is_clear(PINC,4))==0)
+   {
+      if(bit_is_clear(PINC,5))
+ 2d2:	9d 99       	sbic	0x13, 5	; 19
+ 2d4:	18 c0       	rjmp	.+48     	; 0x306 <SetTime+0x5a>
+      {
+			a += 0x01;
+ 2d6:	0f 5f       	subi	r16, 0xFF	; 255
+ 2d8:	1f 4f       	sbci	r17, 0xFF	; 255
+			i += 1;
+ 2da:	f3 94       	inc	r15
+ 2dc:	84 ef       	ldi	r24, 0xF4	; 244
+ 2de:	91 e0       	ldi	r25, 0x01	; 1
+ 2e0:	f6 01       	movw	r30, r12
+ 2e2:	31 97       	sbiw	r30, 0x01	; 1
+ 2e4:	f1 f7       	brne	.-4      	; 0x2e2 <SetTime+0x36>
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 2e6:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 2e8:	d9 f7       	brne	.-10     	; 0x2e0 <SetTime+0x34>
+			_delay_ms(50);
+		if((i%10)==0)
+ 2ea:	8f 2d       	mov	r24, r15
+ 2ec:	6a e0       	ldi	r22, 0x0A	; 10
+ 2ee:	0e 94 fb 01 	call	0x3f6	; 0x3f6 <__udivmodqi4>
+ 2f2:	99 23       	and	r25, r25
+ 2f4:	11 f4       	brne	.+4      	; 0x2fa <SetTime+0x4e>
+		{
+				a += 0x06;
+ 2f6:	0a 5f       	subi	r16, 0xFA	; 250
+ 2f8:	1f 4f       	sbci	r17, 0xFF	; 255
+		}
+		if(i==25)
+ 2fa:	89 e1       	ldi	r24, 0x19	; 25
+ 2fc:	f8 16       	cp	r15, r24
+ 2fe:	19 f4       	brne	.+6      	; 0x306 <SetTime+0x5a>
+ 300:	01 e0       	ldi	r16, 0x01	; 1
+ 302:	10 e0       	ldi	r17, 0x00	; 0
+ 304:	ff 24       	eor	r15, r15
+		{
+				a = 0x01;
+				i = 0;
+		}
+      }
+      if(bit_is_clear(PINC,6))
+ 306:	9e 99       	sbic	0x13, 6	; 19
+ 308:	15 c0       	rjmp	.+42     	; 0x334 <SetTime+0x88>
+      {
+				b += 0x01;
+ 30a:	21 96       	adiw	r28, 0x01	; 1
+				j += 1;
+ 30c:	e3 94       	inc	r14
+ 30e:	84 ef       	ldi	r24, 0xF4	; 244
+ 310:	91 e0       	ldi	r25, 0x01	; 1
+ 312:	f6 01       	movw	r30, r12
+ 314:	31 97       	sbiw	r30, 0x01	; 1
+ 316:	f1 f7       	brne	.-4      	; 0x314 <SetTime+0x68>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 318:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 31a:	d9 f7       	brne	.-10     	; 0x312 <SetTime+0x66>
+			_delay_ms(50);
+		if((j%10)==0)
+ 31c:	8e 2d       	mov	r24, r14
+ 31e:	6a e0       	ldi	r22, 0x0A	; 10
+ 320:	0e 94 fb 01 	call	0x3f6	; 0x3f6 <__udivmodqi4>
+ 324:	99 23       	and	r25, r25
+ 326:	09 f4       	brne	.+2      	; 0x32a <SetTime+0x7e>
+		{
+				b += 0x06;
+ 328:	26 96       	adiw	r28, 0x06	; 6
+		}	
+	     if( j>60)
+ 32a:	8c e3       	ldi	r24, 0x3C	; 60
+ 32c:	8e 15       	cp	r24, r14
+ 32e:	10 f4       	brcc	.+4      	; 0x334 <SetTime+0x88>
+ 330:	c1 e0       	ldi	r28, 0x01	; 1
+ 332:	d0 e0       	ldi	r29, 0x00	; 0
+	   }
+	   
+	   
+ 
+   
+   PORTA = a;
+ 334:	0b bb       	out	0x1b, r16	; 27
+   PORTB = b;
+ 336:	c8 bb       	out	0x18, r28	; 24
+   I2C_WriteRegister(HOURS_REGISTER,a); //I2C_WriteRegister(DS1307,HOURS_REGISTER,0x08+0x04);
+ 338:	82 e0       	ldi	r24, 0x02	; 2
+ 33a:	90 e0       	ldi	r25, 0x00	; 0
+ 33c:	b8 01       	movw	r22, r16
+ 33e:	0e 94 75 00 	call	0xea	; 0xea <I2C_WriteRegister>
+   I2C_WriteRegister(MINUTES_REGISTER,b); //I2C_WriteRegister(DS1307,MINUTES_REGISTER,0x51);
+ 342:	81 e0       	ldi	r24, 0x01	; 1
+ 344:	90 e0       	ldi	r25, 0x00	; 0
+ 346:	be 01       	movw	r22, r28
+ 348:	0e 94 75 00 	call	0xea	; 0xea <I2C_WriteRegister>
+   I2C_WriteRegister(SECONDS_REGISTER,0x00); //I2C_WriteRegister(DS1307,SECONDS_REGISTER,0x00);
+ 34c:	80 e0       	ldi	r24, 0x00	; 0
+ 34e:	90 e0       	ldi	r25, 0x00	; 0
+ 350:	60 e0       	ldi	r22, 0x00	; 0
+ 352:	70 e0       	ldi	r23, 0x00	; 0
+ 354:	0e 94 75 00 	call	0xea	; 0xea <I2C_WriteRegister>
+  byte a = 0x01 ;
+  uint8_t i=1;
+  byte b = 0x00;
+  uint8_t j=0;
+
+   while((bit_is_clear(PINC,4))==0)
+ 358:	9c 99       	sbic	0x13, 4	; 19
+ 35a:	bb cf       	rjmp	.-138    	; 0x2d2 <SetTime+0x26>
+   PORTB = b;
+   I2C_WriteRegister(HOURS_REGISTER,a); //I2C_WriteRegister(DS1307,HOURS_REGISTER,0x08+0x04);
+   I2C_WriteRegister(MINUTES_REGISTER,b); //I2C_WriteRegister(DS1307,MINUTES_REGISTER,0x51);
+   I2C_WriteRegister(SECONDS_REGISTER,0x00); //I2C_WriteRegister(DS1307,SECONDS_REGISTER,0x00);
+   }
+}
+ 35c:	df 91       	pop	r29
+ 35e:	cf 91       	pop	r28
+ 360:	1f 91       	pop	r17
+ 362:	0f 91       	pop	r16
+ 364:	ff 90       	pop	r15
+ 366:	ef 90       	pop	r14
+ 368:	df 90       	pop	r13
+ 36a:	cf 90       	pop	r12
+ 36c:	08 95       	ret
+
+0000036e <WriteTime>:
+
+
+void WriteTime(void)
+{
+ 36e:	df 93       	push	r29
+ 370:	cf 93       	push	r28
+ 372:	00 d0       	rcall	.+0      	; 0x374 <WriteTime+0x6>
+ 374:	00 d0       	rcall	.+0      	; 0x376 <WriteTime+0x8>
+ 376:	00 d0       	rcall	.+0      	; 0x378 <WriteTime+0xa>
+ 378:	cd b7       	in	r28, 0x3d	; 61
+ 37a:	de b7       	in	r29, 0x3e	; 62
+   byte hours, minutes ,seconds;
+   DS1307_GetTime(&hours,&minutes,&seconds);
+ 37c:	ce 01       	movw	r24, r28
+ 37e:	01 96       	adiw	r24, 0x01	; 1
+ 380:	be 01       	movw	r22, r28
+ 382:	6d 5f       	subi	r22, 0xFD	; 253
+ 384:	7f 4f       	sbci	r23, 0xFF	; 255
+ 386:	ae 01       	movw	r20, r28
+ 388:	4b 5f       	subi	r20, 0xFB	; 251
+ 38a:	5f 4f       	sbci	r21, 0xFF	; 255
+ 38c:	0e 94 dd 00 	call	0x1ba	; 0x1ba <DS1307_GetTime>
+   PORTD = seconds;
+ 390:	8d 81       	ldd	r24, Y+5	; 0x05
+ 392:	82 bb       	out	0x12, r24	; 18
+   PORTB = minutes;
+ 394:	8b 81       	ldd	r24, Y+3	; 0x03
+ 396:	88 bb       	out	0x18, r24	; 24
+   PORTA = hours;
+ 398:	89 81       	ldd	r24, Y+1	; 0x01
+ 39a:	8b bb       	out	0x1b, r24	; 27
+}
+ 39c:	26 96       	adiw	r28, 0x06	; 6
+ 39e:	0f b6       	in	r0, 0x3f	; 63
+ 3a0:	f8 94       	cli
+ 3a2:	de bf       	out	0x3e, r29	; 62
+ 3a4:	0f be       	out	0x3f, r0	; 63
+ 3a6:	cd bf       	out	0x3d, r28	; 61
+ 3a8:	cf 91       	pop	r28
+ 3aa:	df 91       	pop	r29
+ 3ac:	08 95       	ret
+
+000003ae <main>:
+
+
+int main(void)
+ { 
+ 3ae:	cf 93       	push	r28
+ 3b0:	df 93       	push	r29
+ DDRD = 0xFF;
+ 3b2:	8f ef       	ldi	r24, 0xFF	; 255
+ 3b4:	81 bb       	out	0x11, r24	; 17
+DDRB = 0xFF;
+ 3b6:	87 bb       	out	0x17, r24	; 23
+DDRA = 0xFF;
+ 3b8:	8a bb       	out	0x1a, r24	; 26
+DDRC &= 0x87;
+ 3ba:	84 b3       	in	r24, 0x14	; 20
+ 3bc:	87 78       	andi	r24, 0x87	; 135
+ 3be:	84 bb       	out	0x14, r24	; 20
+ 
+   PORTC |= 0x78;
+ 3c0:	85 b3       	in	r24, 0x15	; 21
+ 3c2:	88 67       	ori	r24, 0x78	; 120
+ 3c4:	85 bb       	out	0x15, r24	; 21
+   return data;
+}
+
+void I2C_Init(void)
+{
+   TWSR =0;
+ 3c6:	11 b8       	out	0x01, r1	; 1
+   TWBR = ((F_CPU/F_SCL)-16)/2;
+ 3c8:	80 e2       	ldi	r24, 0x20	; 32
+ 3ca:	80 b9       	out	0x00, r24	; 0
+ 3cc:	80 ea       	ldi	r24, 0xA0	; 160
+ 3ce:	9f e0       	ldi	r25, 0x0F	; 15
+ 3d0:	28 ec       	ldi	r18, 0xC8	; 200
+ 3d2:	30 e0       	ldi	r19, 0x00	; 0
+ 3d4:	f9 01       	movw	r30, r18
+ 3d6:	31 97       	sbiw	r30, 0x01	; 1
+ 3d8:	f1 f7       	brne	.-4      	; 0x3d6 <main+0x28>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 3da:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 3dc:	d9 f7       	brne	.-10     	; 0x3d4 <main+0x26>
+ 3de:	c8 ec       	ldi	r28, 0xC8	; 200
+ 3e0:	d0 e0       	ldi	r29, 0x00	; 0
+   PORTC |= 0x78;
+   I2C_Init();
+   _delay_ms(400);
+   while (1)
+   {
+     if(bit_is_clear(PINC,3))
+ 3e2:	9b 99       	sbic	0x13, 3	; 19
+ 3e4:	02 c0       	rjmp	.+4      	; 0x3ea <main+0x3c>
+	 {
+	    SetTime();
+ 3e6:	0e 94 56 01 	call	0x2ac	; 0x2ac <SetTime>
+	 }
+      WriteTime();
+ 3ea:	0e 94 b7 01 	call	0x36e	; 0x36e <WriteTime>
+ 3ee:	ce 01       	movw	r24, r28
+ 3f0:	01 97       	sbiw	r24, 0x01	; 1
+ 3f2:	f1 f7       	brne	.-4      	; 0x3f0 <main+0x42>
+ 3f4:	f6 cf       	rjmp	.-20     	; 0x3e2 <main+0x34>
+
+000003f6 <__udivmodqi4>:
+ 3f6:	99 1b       	sub	r25, r25
+ 3f8:	79 e0       	ldi	r23, 0x09	; 9
+ 3fa:	04 c0       	rjmp	.+8      	; 0x404 <__udivmodqi4_ep>
+
+000003fc <__udivmodqi4_loop>:
+ 3fc:	99 1f       	adc	r25, r25
+ 3fe:	96 17       	cp	r25, r22
+ 400:	08 f0       	brcs	.+2      	; 0x404 <__udivmodqi4_ep>
+ 402:	96 1b       	sub	r25, r22
+
+00000404 <__udivmodqi4_ep>:
+ 404:	88 1f       	adc	r24, r24
+ 406:	7a 95       	dec	r23
+ 408:	c9 f7       	brne	.-14     	; 0x3fc <__udivmodqi4_loop>
+ 40a:	80 95       	com	r24
+ 40c:	08 95       	ret
+
+0000040e <_exit>:
+ 40e:	f8 94       	cli
+
+00000410 <__stop_program>:
+ 410:	ff cf       	rjmp	.-2      	; 0x410 <__stop_program>
