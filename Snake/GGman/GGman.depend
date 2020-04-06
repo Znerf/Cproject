@@ -1,0 +1,38 @@
+# depslib dependency file v1.0
+1485509089 source:e:\school\learn\c colz\snake\ggman\funct.c
+	<windows.h>
+	<Mmsystem.h>
+	<stdlib.h>
+
+1484924078 source:e:\school\learn\c colz\snake\ggman\main.c
+	<stdio.h>
+	<conio.h>
+	<stdlib.h>
+	"funct.h"
+	"snake.h"
+
+1484923097 e:\school\learn\c colz\snake\ggman\funct.h
+
+1484923735 e:\school\learn\c colz\snake\ggman\snake.h
+
+1485508659 source:e:\school\learn\c colz\snake\ggman\snake.c
+	<windows.h>
+
+1508731898 source:e:\school\be\1st sem\project\snake\ggman\funct.c
+	<windows.h>
+	<Mmsystem.h>
+	<stdlib.h>
+
+1486260272 source:e:\school\be\1st sem\project\snake\ggman\main.c
+	<stdio.h>
+	"funct.h"
+	"snake.h"
+
+1484923097 e:\school\be\1st sem\project\snake\ggman\funct.h
+
+1484923735 e:\school\be\1st sem\project\snake\ggman\snake.h
+
+1487752517 source:e:\school\be\1st sem\project\snake\ggman\snake.c
+	<windows.h>
+	<time.h>
+

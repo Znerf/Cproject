@@ -1,0 +1,33 @@
+# depslib dependency file v1.0
+1487648902 source:e:\school\be\1st sem\project\library management\funct.c
+	<windows.h>
+	<Mmsystem.h>
+	<stdlib.h>
+
+1490060896 source:e:\school\be\1st sem\project\library management\main.c
+	<stdio.h>
+	"funct.h"
+	"snake.h"
+	"new.h"
+	"profile.h"
+
+1484923097 e:\school\be\1st sem\project\library management\funct.h
+
+1500719809 source:e:\school\be\1st sem\project\library management\snake.c
+	<windows.h>
+	<time.h>
+
+1490344333 source:e:\school\be\1st sem\project\library management\new.c
+	<stdio.h>
+	<string.h>
+
+1484923735 e:\school\be\1st sem\project\library management\snake.h
+
+1490349397 source:e:\school\be\1st sem\project\library management\profile.c
+	<stdio.h>
+	<string.h>
+
+1490060674 e:\school\be\1st sem\project\library management\new.h
+
+1490060865 e:\school\be\1st sem\project\library management\profile.h
+
